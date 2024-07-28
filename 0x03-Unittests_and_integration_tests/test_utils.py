@@ -39,8 +39,8 @@ class TestGetJson(TestCase):
         """method to test that utils.get_json returns the expected result"""
 
         mock.return_value = test_payload
-        res = get_json(test_url)
-        self.assertEqual(res, test_payload)
+        res_grapper = get_json(test_url)
+        self.assertEqual(res_grapper, test_payload)
 
 
 class TestMemoize(TestCase):
@@ -64,7 +64,7 @@ class TestMemoize(TestCase):
                 return self.a_method()
 
         with patch.object(TestClass, "a_method") as mock:
-            test = TestClass()
-            test.a_property
-            test.a_property
+            test_f = TestClass()
+            test_f.a_property
+            test_f.a_property
             mock.assert_called_once
