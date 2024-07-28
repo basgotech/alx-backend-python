@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""memoize turns methods into properties"""
+"""Module containing  unit test for client package"""
 from unittest import TestCase
 from parameterized import parameterized
 from client import GithubOrgClient
@@ -11,12 +11,12 @@ from parameterized import parameterized_class
 
 
 class TestGithubOrgClient(TestCase):
-    """"Class that test client.GithubOrgClient class"""
+    """"Class that defines attributes to test client.GithubOrgClient class"""
 
     @parameterized.expand([("google"), ("abc")])
     @patch('client.get_json', return_value={"payload": True})
     def test_org(self, org_name, mock):
-        """test that GithubOrgClient.org returns the correct value"""
+        """Method to test if GithubOrgClient.org returns the correct value"""
 
         client = GithubOrgClient(org_name)
         res = client.org
@@ -25,7 +25,7 @@ class TestGithubOrgClient(TestCase):
         mock.assert_called_once
 
     def test_public_repos_url(self):
-        """method to unit-test GithubOrgClient._public_repos_url"""
+        """Method to test GithubOrgClient._public_repos_url function"""
 
         with patch.object(GithubOrgClient, 'org',
                           new_callable=PropertyMock,
@@ -40,7 +40,7 @@ class TestGithubOrgClient(TestCase):
 
     @patch("client.get_json", return_value=[{"name": "Test value"}])
     def test_public_repos(self, mock):
-        """to unit-test GithubOrgClient.public_repos."""
+        """Method to test GithubOrgClient.public_rep function"""
 
         with patch.object(GithubOrgClient, '_public_repos_url',
                           new_callable=PropertyMock,
@@ -57,7 +57,7 @@ class TestGithubOrgClient(TestCase):
         ({"license": {"key": "my_license"}}, "my_license", True),
         ({"license": {"key": "other_license"}}, "my_license", False)])
     def test_has_license(self, repo, license_key, ret):
-        """to unit-test GithubOrgClient.has_license."""
+        """Method to test GithubOrgClient.has_license function"""
 
         client = GithubOrgClient("Test value")
         res = client.has_license(repo, license_key)
@@ -71,19 +71,19 @@ class TestIntegrationGithubOrgClient(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """mock requests.get to return example payloads"""
+        """Method to prepare test fixture"""
 
         cls.get_patcher = patch('requests.get', side_effect=HTTPError)
         cls.get_patcher.start()
 
     @classmethod
     def tearDownClass(cls):
-        """class method to stop the patcher."""
+        """Method called after test method has been called"""
 
         cls.get_patcher.stop()
 
     def test_public_repos(self):
-        """method to unit-test GithubOrgClient._public_repos_url."""
+        """Method to test GithubOrgClient.public_repos function"""
 
         res = GithubOrgClient("Test value")
         self.assertTrue(res)
